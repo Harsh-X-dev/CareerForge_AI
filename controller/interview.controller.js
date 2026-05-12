@@ -1,19 +1,24 @@
-import { pdfParse } from "pdf-parse";
+import {PDFParse}  from "pdf-parse";
 import InterviewReportModel from "../models/interviewReport.model.js";
-import {genrateResumePdf,genrateInterviewReport} from "../services/ai.services.js"
-
+import {
+  genrateResumePdf,
+  genrateInterviewReport,
+} from "../services/ai.service.js";
 
 export const genrateInterviewReportController = async (req, res) => {
-  const resumeContent = await pdfParse(req.file.buffer);
+  const parser = new PDFParse(
+   Uint8Array.from(req.file.buffer)
+);
+  const resumeContent = await parser.getText();
   const { selfDescription, jobDescription } = req.body;
 
-  const interviewReportByAi = await genrateInterviewReportController({
+  const interviewReportByAi = await genrateInterviewReport({
     resume: resumeContent.text,
     selfDescription,
     jobDescription,
   });
 
-  const interviewReport = InterviewReportModel.create({
+  const interviewReport = await InterviewReportModel.create({
     user: req.user.id,
     resume: resumeContent.text,
     selfDescription,
@@ -27,7 +32,7 @@ export const genrateInterviewReportController = async (req, res) => {
   });
 };
 export const getInterviewReportByIdController = async (req, res) => {
-  const interviewId = req.params;
+  const {interviewId} = req.params;
 
   const interviewReport = await InterviewReportModel.findOne({
     _id: interviewId,
@@ -46,7 +51,7 @@ export const getInterviewReportByIdController = async (req, res) => {
   });
 };
 export const getAllinterviewReportController = async (req, res) => {
-  const interviewReports = find({ user: req.user.id })
+  const interviewReports = await InterviewReportModel.find({ user: req.user.id })
     .sort({ createdAt: -1 })
     .select(
       "-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan",
@@ -58,9 +63,9 @@ export const getAllinterviewReportController = async (req, res) => {
   });
 };
 export const genrateResumePdfController = async (req, res) => {
-  const interviewReportId = req.params;
-
-  const interviewReport = InterviewReportModel.findById(interviewReportId);
+  const {interviewReportId} = req.params;
+console.log(interviewReportId);
+  const interviewReport = await InterviewReportModel.findById(interviewReportId);
 
   if (!interviewReport) {
     return res.status(404).json({
@@ -70,7 +75,7 @@ export const genrateResumePdfController = async (req, res) => {
 
   const { resume, jobDescription, selfDescription } = interviewReport;
 
-  const pdfBuffer = genrateResumePdf({
+  const pdfBuffer = await genrateResumePdf({
     resume,
     jobDescription,
     selfDescription,

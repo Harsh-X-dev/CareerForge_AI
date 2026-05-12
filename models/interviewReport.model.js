@@ -17,7 +17,6 @@ const questionSchema = new mongoose.Schema(
   { _id: false },
 );
 
-
 const SkillGapSchema = new mongoose.Schema(
   {
     skill: {
@@ -33,7 +32,7 @@ const SkillGapSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const PreprationPlanSchema = new mongoose.Schema(
+const PreparationPlanSchema = new mongoose.Schema(
   {
     day: {
       type: String,
@@ -43,14 +42,15 @@ const PreprationPlanSchema = new mongoose.Schema(
       type: String,
       required: [true, "Focus is required"],
     },
-    task: [{
-      type: String,
-      required: [true, "Task is required"],
-    }],
+    tasks: [
+      {
+        type: String,
+        required: [true, "Task is required"],
+      },
+    ],
   },
   { _id: false },
 );
-
 
 const interviewReportSchema = new mongoose.Schema(
   {
@@ -69,12 +69,12 @@ const interviewReportSchema = new mongoose.Schema(
       min: 0,
       max: 100,
     },
-    technicalQuestion: [questionSchema],
-    behaviroalQuestions: [questionSchema],
-    SkillGap: [SkillGapSchema],
-    prepartionPlan: [PreprationPlanSchema],
+    technicalQuestions: [questionSchema],
+    behavioralQuestions: [questionSchema],
+    skillGaps: [SkillGapSchema],
+    preparationPlan: [PreparationPlanSchema],
     user: {
-      type: mongoose.Schema.type.objectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "userSchema",
     },
     title: { type: String, required: [true, "Title is required"] },
@@ -84,7 +84,9 @@ const interviewReportSchema = new mongoose.Schema(
   },
 );
 
-
-const InterviewReportModel = mongoose.model(interviewReportSchema, "interviewReportSchema");
+const InterviewReportModel = mongoose.model(
+  "interviewReportSchema",
+  interviewReportSchema,
+);
 
 export default InterviewReportModel;

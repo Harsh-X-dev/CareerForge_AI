@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import puppeteer from "puppeteer";
 
 const ai = new GoogleGenAI({
@@ -11,9 +11,9 @@ const interviewReportSchema = z.object({
   matchScore: z
     .number()
     .describe(
-      "A score between 0 to 100 indicating hoe well the candidate's profile matches the job describe",
+      "A score between 0 to 100 indicating how well the candidate's profile matches the job description",
     ),
-  technicalQuestion: z
+  technicalQuestions: z
     .array(
       z.object({
         question: z
@@ -30,9 +30,9 @@ const interviewReportSchema = z.object({
       }),
     )
     .describe(
-      "techincal question that can be asked in the interview along with their intention and how to answer them",
+      "technical question that can be asked in the interview along with their intention and how to answer them",
     ),
-  behavioralQuestion: z
+  behavioralQuestions: z
     .array(
       z.object({
         question: z
@@ -52,7 +52,7 @@ const interviewReportSchema = z.object({
       "behavioral question that can be asked in the interview along with their intention and how to answer them",
     ),
 
-  skillGap: z
+  skillGaps: z
     .array(
       z.object({
         skill: z.string().describe("the skill that candidate is lacking"),
@@ -78,7 +78,7 @@ const interviewReportSchema = z.object({
             "The main focus of this day in the preparation plan, e.g. data structures, system design, mock interviews etc.",
           ),
         tasks: z
-          .array(z.string())
+          .array(z.string().describe("a specific task to be done on this day"))
           .describe(
             "List of tasks to be done on this day to follow the preparation plan, e.g. read a specific book or article, solve a set of problems, watch a video etc.",
           ),
@@ -99,25 +99,27 @@ export const genrateInterviewReport = async ({
   selfDescription,
   jobDescription,
 }) => {
-  const prompt = `Genrate a interview report for a candidate with the following details:
-                        Rseume: ${resume}
-                        self Description: ${selfDescription}
-                        job Description: ${jobDescription}`;
+  const prompt = `Generate an interview report for a candidate with the following details:
+                        Resume: ${resume}
+                        Self Description: ${selfDescription}
+                        Job Description: ${jobDescription}
+`;
 
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
-      responseSchema: zodToJsonSchema(interviewReportSchema),
+      responseSchema: zodToJsonSchema(interviewReportSchema)
     },
   });
 
-  return JSON.parse(response.text);
+  const report = interviewReportSchema.parse(JSON.parse(response.text));
+  return report;
 };
 
 const genratePdfFromHtml = async (htmlContent) => {
-  const browser = await puppeteer.launch;
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 

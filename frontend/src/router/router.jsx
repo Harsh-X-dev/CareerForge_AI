@@ -11,10 +11,11 @@ import { Home } from "../features/dashboard/component/Home.jsx";
 import { Reports } from "../features/dashboard/component/Reports.jsx";
 import { Profile } from "../features/dashboard/component/Profile.jsx";
 import { ReportDetail } from "../features/dashboard/component/ReportDetail.jsx";
-
+import { LandingPage } from "../features/landing/LandingPage.jsx";
 export const Router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
@@ -22,10 +23,10 @@ export const Router = createBrowserRouter(
         element={
           <Protected>
             <Dashboard />
-          </Protected> 
+          </Protected>
         }
       >
-        <Route path="home"  element={<Home />} />
+        <Route path="home" element={<Home />} />
         <Route path="reports" element={<Reports />} />
         <Route path="reports/:id" element={<ReportDetail />} />
         <Route path="profile" element={<Profile />} />

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import UserModel from "../models/User.model.js";
+import UserModel from "../models/user.model.js";
 import blacklistTokenModel from "../models/blacklist.model.js";
 
 const signToken = (id) => {

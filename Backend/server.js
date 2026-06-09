@@ -2,7 +2,6 @@ import "./config/env.js";
 import app from "./app.js";
 import connectDB from "./config/database.js";
 
-
 connectDB();
 
 app.listen(3000, () => {

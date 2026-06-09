@@ -1,28 +1,40 @@
 import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDash } from "../hooks/useDash";
+import {
+  ArrowLeft,
+  Download,
+  Code,
+  UserCheck,
+  AlertTriangle,
+  Target,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function ReportDetail() {
   const { id } = useParams();
   const location = useLocation();
   const [reportData, setReportData] = useState(location.state?.report || null);
-  const { loading, handleGetReportDetail,handleGenrateResume } = useDash();
+  const { loading, handleGetReportDetail, handleGenrateResume } = useDash();
+
   useEffect(() => {
     if (!reportData) {
       handleGetReportDetail(id).then((data) => setReportData(data));
     }
-  }, [id, reportData, handleGetReportDetail]);
-
- 
+  }, [id, reportData]);
 
   if (loading) {
-    return <h1>Loading.....</h1>;
+    return (
+      <div className="h-full flex items-center justify-center bg-[#f8fafc]">
+        <h1 className="text-xl font-medium text-gray-500">Loading.....</h1>
+      </div>
+    );
   }
 
   return (
     <div
       id="report-detail-body"
-      className="bg-gray-900 h-screen flex font-['Inter',_sans-serif] overflow-hidden text-slate-200"
+      className="bg-[#f8fafc] h-screen flex font-['Inter',_sans-serif] overflow-hidden text-gray-800"
     >
       <main
         id="report-main-content"
@@ -30,62 +42,63 @@ export function ReportDetail() {
       >
         <div
           id="report-container"
-          className="w-full max-w-5xl mx-auto flex flex-col gap-6"
+          className="w-full max-w-6xl mx-auto flex flex-col gap-6"
         >
+          <div className="mb-2">
+            <Link
+              to="/reports"
+              className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium w-max"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Reports
+            </Link>
+          </div>
+
           <header
             id="report-header"
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#1e2330] border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-lg"
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 shadow-sm"
           >
             <div id="header-text-group">
               <h1
                 id="report-title"
-                className="text-3xl font-bold text-white tracking-tight"
+                className="text-2xl font-bold text-gray-900 tracking-tight"
               >
                 {reportData?.title}
               </h1>
-              <p id="report-date" className="text-sm text-slate-500 mt-1"></p>
-              Generated on{" "}
-              {new Date(reportData?.updatedAt).toLocaleString("en-IN", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              <p id="report-date" className="text-sm text-gray-500 mt-1">
+                Generated on{" "}
+                {new Date(reportData?.updatedAt).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
             </div>
 
             <div id="header-actions-group" className="flex items-center gap-4">
               <button
                 id="download-pdf-btn"
-                className="px-5 py-2.5 bg-transparent border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-all text-sm font-semibold flex items-center gap-2"
+                className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-sm font-semibold flex items-center gap-2 shadow-sm"
                 onClick={() => handleGenrateResume(reportData?._id)}
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                  />
-                </svg>
-                Generate PDF
+                <Download className="w-4 h-4" />
+                Download PDF
               </button>
               <div
                 id="match-score-badge"
-                className="flex flex-col items-center justify-center bg-green-500/10 border border-green-500/30 px-6 py-2 rounded-xl"
+                className="flex flex-col items-center justify-center bg-green-50 px-5 py-2 rounded-lg"
               >
                 <span
                   id="score-label"
-                  className="text-xs font-medium text-green-400/80 uppercase tracking-wider mb-0.5"
+                  className="text-[10px] font-bold text-green-700 uppercase tracking-wider mb-0.5"
                 >
                   Match Score
                 </span>
                 <span
                   id="score-value"
-                  className="text-2xl font-bold text-green-400"
+                  className="text-xl font-bold text-green-600"
                 >
                   {reportData?.matchScore}%
                 </span>
@@ -100,58 +113,30 @@ export function ReportDetail() {
             <div id="left-column" className="lg:col-span-2 flex flex-col gap-6">
               <section
                 id="tech-questions-section"
-                className="bg-[#1e2330] border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-lg"
+                className="bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 shadow-sm"
               >
                 <h2
                   id="tech-q-heading"
-                  className="text-xl font-bold text-white mb-6 flex items-center gap-2"
+                  className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                    />
-                  </svg>
+                  <Code className="w-5 h-5 text-gray-500" />
                   Technical Questions
                 </h2>
 
-                <div id="tech-q-list" className="space-y-6">
+                <div id="tech-q-list" className="space-y-8">
                   {reportData?.technicalQuestions?.map((question, index) => (
-                    <div
-                      id="tech-q-1"
-                      key={index}
-                      className="bg-[#131722] border border-slate-700 rounded-2xl p-5"
-                    >
-                      <p
-                        id="tq1-text"
-                        className="text-lg font-medium text-slate-200 mb-2"
-                      >
+                    <div id={`tech-q-${index}`} key={index}>
+                      <p className="text-md font-semibold text-gray-900 mb-2">
                         {index + 1}. {question.question}
                       </p>
-                      <p
-                        id="tq1-intent"
-                        className="text-xs text-slate-500 italic mb-4"
-                      >
+                      <p className="text-xs text-gray-500 mb-4 leading-relaxed">
                         Intent: {question.intention}
                       </p>
-                      <div
-                        id="tq1-answer-box"
-                        className="bg-blue-500/5 border-l-4 border-blue-500 p-4 rounded-r-lg"
-                      >
-                        <span className="block text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">
+                      <div className="bg-[#f8fafc] border border-gray-100 p-5 rounded-xl">
+                        <span className="block text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-2">
                           Suggested Answer
                         </span>
-                        <p
-                          id="tq1-answer-text"
-                          className="text-sm text-slate-300 leading-relaxed"
-                        >
+                        <p className="text-sm text-gray-700 leading-relaxed">
                           {question.answer}
                         </p>
                       </div>
@@ -162,112 +147,63 @@ export function ReportDetail() {
 
               <section
                 id="behavioral-questions-section"
-                className="bg-[#1e2330] border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-lg"
+                className="bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 shadow-sm"
               >
                 <h2
                   id="behavioral-q-heading"
-                  className="text-xl font-bold text-white mb-6 flex items-center gap-2"
+                  className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5 text-purple-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                  <UserCheck className="w-5 h-5 text-gray-500" />
                   Behavioral Questions
                 </h2>
-                {reportData?.behavioralQuestions?.map((question, index) => (
-                  <div
-                    id="beh-q-list"
-                    key={index}
-                    className="space-y-6"
-                  >
-                    <div
-                      id="beh-q-1"
-                      className="bg-[#131722] border border-slate-700 rounded-2xl p-5"
-                    >
-                      <p
-                        id="bq1-text"
-                        className="text-lg font-medium text-slate-200 mb-2"
-                      >
+                <div id="beh-q-list" className="space-y-8">
+                  {reportData?.behavioralQuestions?.map((question, index) => (
+                    <div id={`beh-q-${index}`} key={index}>
+                      <p className="text-md font-semibold text-gray-900 mb-2">
                         {index + 1}. {question.question}
                       </p>
-                      <p
-                        id="bq1-intent"
-                        className="text-xs text-slate-500 italic mb-4"
-                      >
+                      <p className="text-xs text-gray-500 mb-4 leading-relaxed">
                         Intent: {question.intention}
                       </p>
-                      <div
-                        id="bq1-answer-box"
-                        className="mt-4 bg-purple-500/5 border-l-4 border-purple-500 p-4 rounded-r-lg"
-                      >
-                        <span className="block text-xs font-bold text-purple-400 uppercase tracking-wider mb-1">
-                          Approach
+                      <div className="bg-[#f8fafc] border border-gray-100 p-5 rounded-xl">
+                        <span className="block text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-2">
+                          Suggested Approach
                         </span>
-                        <p
-                          id="bq1-answer-text"
-                          className="text-sm text-slate-300 leading-relaxed"
-                        >
+                        <p className="text-sm text-gray-700 leading-relaxed">
                           {question.answer}
                         </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </section>
             </div>
 
             <div id="right-column" className="flex flex-col gap-6">
               <section
                 id="skill-gaps-section"
-                className="bg-[#1e2330] border border-slate-700 rounded-3xl p-6 shadow-lg"
+                className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm"
               >
                 <h2
                   id="gaps-heading"
-                  className="text-lg font-bold text-white mb-4 flex items-center gap-2"
+                  className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5 text-orange-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                    />
-                  </svg>
+                  <AlertTriangle className="w-5 h-5 text-orange-500" />
                   Identified Skill Gaps
                 </h2>
 
-                <div id="gaps-list" className="flex flex-col gap-3">
+                <div id="gaps-list" className="flex flex-col gap-4">
                   {reportData?.skillGaps?.map((gap, index) => (
-                    <div
-                      key={index}
-                      id={`gap-${index + 1}`}
-                      className="bg-[#131722] border border-orange-500/30 rounded-xl p-3 flex items-start gap-3"
-                    >
-                      <div className="w-2 h-2 rounded-full bg-orange-400 mt-1.5"></div>
+                    <div key={index} className="flex items-start gap-3">
+                      <div
+                        className={`w-2 h-2 rounded-full mt-1.5 ${gap.severity === "High" ? "bg-red-500" : "bg-orange-400"}`}
+                      ></div>
                       <div>
-                        <p
-                          id="gap-text-1"
-                          className="text-sm font-medium text-slate-200"
-                        >
+                        <p className="text-sm font-semibold text-gray-800 mb-0.5">
                           {gap.skill}
                         </p>
                         <span
-                          id="gap-severity-1"
-                          className="text-xs text-orange-400 font-semibold"
+                          className={`text-[10px] font-bold uppercase ${gap.severity === "High" ? "text-red-500" : "text-orange-500"}`}
                         >
                           {gap.severity} Priority
                         </span>
@@ -279,50 +215,31 @@ export function ReportDetail() {
 
               <section
                 id="prep-plan-section"
-                className="bg-[#1e2330] border border-slate-700 rounded-3xl p-6 shadow-lg flex-1"
+                className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex-1"
               >
                 <h2
                   id="plan-heading"
-                  className="text-lg font-bold text-white mb-6 flex items-center gap-2"
+                  className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                    />
-                  </svg>
+                  <Target className="w-5 h-5 text-green-500" />
                   Action Plan
                 </h2>
 
                 <div
                   id="timeline-container"
-                  className="relative border-l-2 border-slate-700 ml-3 space-y-8"
+                  className="relative border-l-2 border-gray-100 ml-3 space-y-8"
                 >
                   {reportData?.preparationPlan?.map((day, index) => (
-                    <div
-                      id="day-1"
-                      key={index}
-                      className="relative pl-6"
-                    >
-                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[#131722] border-2 border-green-500"></div>
-                      <h3
-                        id="day-1-title"
-                        className="text-sm font-bold text-green-400 mb-1"
-                      >
-                        Day {day.day}: {day.focus}
+                    <div key={index} className="relative pl-6">
+                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-green-500"></div>
+                      <h3 className="text-sm font-bold text-gray-900 mb-2">
+                        Day {day.day}:{" "}
+                        <span className="font-medium text-gray-600">
+                          {day.focus}
+                        </span>
                       </h3>
-                      <ul
-                        id="day-1-tasks"
-                        className="list-disc list-outside ml-4 text-xs text-slate-400 space-y-1"
-                      >
-                        {day?.tasks?.map((task,index) => (
+                      <ul className="list-disc list-outside ml-4 text-xs text-gray-600 space-y-2 leading-relaxed">
+                        {day?.tasks?.map((task, index) => (
                           <li key={index}>{task}</li>
                         ))}
                       </ul>

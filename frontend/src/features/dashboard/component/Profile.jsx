@@ -1,84 +1,47 @@
 import useAuth from "../../auth/hooks/useAuth.js";
+import { LogOut } from "lucide-react";
+
 export const Profile = () => {
   const { user, handleLogoutUser } = useAuth();
-
   return (
     <div
       id="profile-widget-wrapper"
-      className="w-full h-full flex items-center justify-center p-4"
+      className="w-full h-full flex flex-col p-8 bg-[#f8fafc] items-center"
     >
       <div
         id="profile-card-component"
-        className="w-full max-w-sm bg-[#1e2330] border-2 border-slate-600 rounded-[2.5rem] p-8 sm:p-10 flex flex-col shadow-2xl min-h-[480px]"
+        className="w-full max-w-md bg-white border border-gray-100 rounded-[2rem] p-8 sm:p-10 flex flex-col items-center shadow-sm relative mt-10"
       >
-        <div id="avatar-container" className="flex justify-center mb-10 mt-4">
+        <div id="avatar-container" className="flex justify-center -mt-20 mb-6">
           <div
             id="user-avatar-circle"
-            className="w-32 h-32 rounded-full border-2 border-slate-500 bg-[#131722] flex items-center justify-center shadow-inner relative group cursor-pointer transition-all hover:border-blue-500"
+            className="w-28 h-28 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg border-4 border-white"
           >
             <span
               id="user-initials"
-              className="text-4xl font-bold text-slate-300 tracking-wider"
+              className="text-4xl font-bold text-white tracking-wider"
             >
-              {user?.username?.charAt(0).toUpperCase() || "U"}
+              {user?.username?.charAt(0).toUpperCase() || "T"}
             </span>
-
-            <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                ></path>
-              </svg>
-            </div>
           </div>
         </div>
 
-        <div id="user-info-fields" className="flex flex-col gap-5 w-full mb-12">
-          <div id="username-display-group" className="relative">
-            <div
-              id="username-box"
-              className="w-full bg-[#131722] border border-slate-700 rounded-2xl px-6 py-4 flex items-center shadow-sm hover:border-slate-500 transition-colors"
-            >
-              <span
-                id="username-value"
-                className="text-slate-300 font-medium tracking-wide"
-              >
-                {user?.username}
-              </span>
-            </div>
-          </div>
-
-          <div id="email-display-group" className="relative">
-            <div
-              id="email-box"
-              className="w-full bg-[#131722] border border-slate-700 rounded-2xl px-6 py-4 flex items-center shadow-sm hover:border-slate-500 transition-colors"
-            >
-              <span
-                id="email-value"
-                className="text-slate-300 font-medium tracking-wide"
-              >
-                {user?.email}
-              </span>
-            </div>
-          </div>
+        <div className="text-center mb-8">
+           <h2 className="text-2xl font-bold text-gray-900 mb-1">{user?.username || "testuser"}</h2>
+           <p className="text-sm text-gray-500">{user?.email || "test@example.com"}</p>
         </div>
 
-        <div id="profile-actions" className="mt-auto flex justify-end w-full">
+
+        <div className="w-full border-t border-gray-100 pt-6 mt-auto">
+          
           <button
             id="card-logout-btn"
             type="button"
             onClick={handleLogoutUser}
-            className="px-8 py-3 bg-transparent border-2 border-slate-600 text-slate-400 font-semibold rounded-2xl hover:bg-red-500/10 hover:border-red-500 hover:text-red-500 transition-all flex items-center gap-2 shadow-sm"
+            className="w-full py-3 bg-white border border-red-200 text-red-500 font-semibold rounded-xl hover:bg-red-50 transition-all flex items-center justify-center gap-2 shadow-sm"
           >
-            logout
+            <LogOut className="w-4 h-4" />
+            Logout
           </button>
         </div>
       </div>

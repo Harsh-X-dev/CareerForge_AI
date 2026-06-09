@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useDash } from "../hooks/useDash";
+import { UploadCloud, Sparkles } from "lucide-react";
+
 export const Home = () => {
   const [data, setData] = useState({});
   const { handleGenrateReport, loading } = useDash();
@@ -7,27 +9,48 @@ export const Home = () => {
   const resumeRef = useRef(null);
 
   if (loading) {
-    return <h1>Loading.....</h1>;
+    return (
+      <div className="h-full flex items-center justify-center">
+        <h1 className="text-xl font-medium text-gray-500">Loading.....</h1>
+      </div>
+    );
   }
 
   return (
     <div
       id="ai-generator-wrapper"
-      className="w-full h-full flex items-center justify-center p-4"
+      // Added items-center here to center the content horizontally
+      className="w-full h-full flex flex-col items-center p-8 bg-[#f8fafc] overflow-y-auto"
     >
+      {/* Added w-full here to ensure proper alignment within the max-w-4xl constraint */}
+      <div className="w-full max-w-4xl mb-8">
+        <span className="text-xs font-bold tracking-widest text-indigo-500 uppercase mb-2 block">
+          AI Interview Preparation
+        </span>
+        <h1 className="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+          Prepare Smarter. <br />
+          <span className="text-indigo-600">Interview Better.</span>
+        </h1>
+        <p className="text-gray-500 max-w-xl text-lg">
+          Upload your resume, paste the job description, and let our AI analyze
+          your profile to generate a personalized interview report with tailored
+          questions and insights.
+        </p>
+      </div>
+
       <div
         id="ai-report-generator-component"
-        className="w-full max-w-4xl bg-[#1e2330] border-2 border-dashed border-slate-600 rounded-3xl p-6 sm:p-8 flex flex-col shadow-2xl"
+        className="w-full max-w-4xl bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 flex flex-col shadow-sm"
       >
         <div
           id="form-grid"
-          className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-8 mb-8"
         >
           <div id="text-inputs-col" className="flex flex-col gap-6">
             <div id="self-desc-wrapper">
               <label
                 id="self-desc-label"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Self-Description
               </label>
@@ -36,8 +59,8 @@ export const Home = () => {
                 id="self-description"
                 rows="4"
                 placeholder="Enter your self-description here..."
-                className="w-full px-4 py-3 bg-[#131722] border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-all"
-                value={data.selfDescription}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-none transition-all"
+                value={data.selfDescription || ""}
                 onChange={(e) => {
                   setData((prevData) => ({
                     ...prevData,
@@ -50,7 +73,7 @@ export const Home = () => {
             <div id="job-desc-wrapper">
               <label
                 id="job-desc-label"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Job Description
               </label>
@@ -59,8 +82,8 @@ export const Home = () => {
                 id="job-description"
                 rows="4"
                 placeholder="Paste the job description here..."
-                className="w-full px-4 py-3 bg-[#131722] border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-all"
-                value={data.jobDescription}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-none transition-all"
+                value={data.jobDescription || ""}
                 onChange={(e) => {
                   setData((prevData) => ({
                     ...prevData,
@@ -71,7 +94,7 @@ export const Home = () => {
             </div>
           </div>
 
-          <div id="upload-col" className="flex flex-col h-full">
+          <div id="upload-col" className="flex flex-col h-full mt-7">
             <label
               htmlFor="resume-file-input"
               id="resume-dropzone"
@@ -84,44 +107,27 @@ export const Home = () => {
               onDragOver={(e) => {
                 e.preventDefault();
               }}
-              className="flex-1 h-full border-2 border-dashed border-slate-600 bg-[#131722] rounded-2xl flex flex-col items-center justify-center p-8 hover:border-slate-500 hover:bg-[#1a202c] transition-colors cursor-pointer group min-h-[200px]"
+              className="flex-1 h-full border-2 border-dashed border-gray-300 bg-gray-50/50 rounded-2xl flex flex-col items-center justify-center p-8 hover:border-indigo-400 hover:bg-indigo-50/50 transition-colors cursor-pointer group min-h-[250px]"
             >
               {selectedFileName ? (
                 <>
-                  <span className="text-green-400 text-sm font-semibold">
+                  <span className="text-indigo-600 text-sm font-semibold text-center">
                     {selectedFileName}
                   </span>
-
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-gray-500 mt-2">
                     File selected successfully
                   </span>
                 </>
               ) : (
                 <>
-                  <svg
-                    id="upload-icon"
-                    className="w-10 h-10 text-slate-400 group-hover:text-blue-400 transition-colors mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    ></path>
-                  </svg>
-
+                  <UploadCloud className="w-12 h-12 text-indigo-500 mb-4 group-hover:scale-110 transition-transform" />
                   <span
                     id="upload-text-main"
-                    className="text-sm font-medium text-slate-300 text-center mb-1"
+                    className="text-sm font-semibold text-gray-700 text-center mb-1"
                   >
                     Click to upload or drag & drop
                   </span>
-
-                  <span id="upload-text-sub" className="text-xs text-slate-500">
+                  <span id="upload-text-sub" className="text-xs text-gray-500">
                     Only PDF files
                   </span>
                 </>
@@ -146,27 +152,13 @@ export const Home = () => {
         <button
           id="generate-btn"
           type="button"
-          className="w-full bg-black text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-900 border border-slate-800 transition-colors shadow-lg"
+          className="w-full bg-indigo-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200"
           onClick={(e) => {
             e.preventDefault();
             handleGenrateReport(data);
           }}
         >
-          <svg
-            id="generate-icon"
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-            ></path>
-          </svg>
+          <Sparkles className="w-5 h-5" />
           GENERATE REPORT
         </button>
       </div>

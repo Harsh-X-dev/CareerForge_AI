@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDash } from "../hooks/useDash";
+import { Briefcase, ArrowRight } from "lucide-react";
 
 export const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -13,71 +14,66 @@ export const Reports = () => {
       setReports(data);
     };
     getallReports();
-  }, [handleGetAllReports]);
+  }, []);
 
-  console.log(reports);
   return (
     <div
       id="reports-list-component"
-      className="w-full h-full p-6 flex flex-col"
+      className="w-full h-full p-8 flex flex-col bg-[#f8fafc] overflow-y-auto"
     >
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">All Reports</h2>
+          <p className="text-sm text-gray-500">View and access all your generated interview reports.</p>
+        </div>
+        
+      </div>
+
       <div
         id="reports-scrollable-container"
-        className="overflow-y-auto pr-2 focus:outline-none grid content-start gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 pb-8"
       >
-        {reports?.map((reports) => {
+        {reports?.map((report) => {
           return (
             <div
-              key={reports?._id}
-              id={reports?._id}
-              className="bg-[#131722] border border-slate-700 rounded-2xl p-5 grid grid-cols-1 sm:grid-cols-[3fr_1fr_1fr] items-center gap-4 transition-all hover:border-slate-500"
+              key={report?._id}
+              id={report?._id}
+              className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col shadow-sm hover:shadow-md transition-all"
             >
-              <div id="report-info-group-1" className="grid gap-1">
-                <h3
-                  id="report-title-text-1"
-                  className="text-xl font-bold text-slate-200 tracking-wide"
-                >
-                  {reports?.title}
-                </h3>
-                <span
-                  id="report-date-text-1"
-                  className="text-xs text-slate-500"
-                >
-                  {new Date(reports?.updatedAt).toLocaleString()}
-                </span>
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex gap-4 items-start">
+                  <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600">
+                    <Briefcase className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">
+                      {report?.title || "Role Title Missing"}
+                    </h3>
+                    <span className="text-xs text-gray-500">
+                      {new Date(report?.updatedAt).toLocaleString("en-US", {
+                         month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute:"2-digit"
+                      })}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div
-                id="report-match-group-1"
-                className="grid justify-start sm:justify-center text-left sm:text-center content-center"
-              >
-                <span
-                  id="report-match-label-1"
-                  className="text-xs font-medium text-slate-400 uppercase tracking-wider"
-                >
-                  Match
-                </span>
-                <span
-                  id="report-match-percentage-1"
-                  className="text-lg font-bold text-green-400"
-                >
-                  {reports.matchScore}%
-                </span>
+              <div className="mb-6">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 block">
+                    Match Score
+                 </span>
+                 <span className="text-3xl font-extrabold text-green-500">
+                    {report?.matchScore || 0}%
+                 </span>
               </div>
 
-              <div
-                id="report-action-group-1"
-                className="grid justify-stretch sm:justify-end"
-              >
+              <div className="mt-auto">
                 <button
-                  id="report-view-btn-1"
-                  type="button"
-                  onClick={() => {
-                    navigate(`/reports/${reports?._id}`);
-                  }}
-                  className="px-6 py-2 bg-transparent border border-slate-500 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-all text-sm font-semibold tracking-wider"
+                  onClick={() => navigate(`/reports/${report?._id}`)}
+                  className="w-max px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-lg font-semibold text-sm hover:bg-indigo-100 transition-colors flex items-center gap-2"
                 >
-                  VIEW
+                  View Report
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>

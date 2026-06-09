@@ -1,94 +1,116 @@
 import { NavLink } from "react-router-dom";
+import { FlaskConical, LayoutDashboard, Files, User, LogOut, X } from "lucide-react";
 
-export const Sidebar = ({ handleLogout }) => {
+export const Sidebar = ({ handleLogout, isMobileMenuOpen, closeMobileMenu }) => {
   return (
-    <div className="bg-gray-900 h-screen flex font-['Inter',_sans-serif] overflow-hidden">
-      <aside
-        id="dash-sidebar"
-        className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col justify-between hidden md:flex z-20"
+    <>
+      {/* Dark Overlay Backdrop for Mobile */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          onClick={closeMobileMenu}
+        ></div>
+      )}
+
+      {/* Sidebar Container */}
+      <div
+        className={`fixed inset-y-0 left-0 z-50 transform md:relative md:translate-x-0 transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } bg-[#f8fafc] h-screen flex font-['Inter',_sans-serif] overflow-hidden`}
       >
-        <div id="dash-sidebar-top">
-          <div
-            id="dash-logo-container"
-            className="h-20 flex items-center px-8 border-b border-gray-700"
-          >
-            <svg
-              id="dash-logo-svg"
-              className="w-6 h-6 text-white mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <aside
+          id="dash-sidebar"
+          className="w-64 bg-white border-r border-gray-100 flex flex-col justify-between h-full"
+        >
+          <div id="dash-sidebar-top">
+            <div
+              id="dash-logo-container"
+              className="h-20 flex items-center justify-between px-6 sm:px-8"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-              ></path>
-            </svg>
-            <span
-              id="dash-logo-text"
-              className="font-bold text-xl tracking-tight text-white"
-            >
-              PrepAI
-            </span>
+              <div className="flex items-center">
+                <FlaskConical className="w-6 h-6 text-indigo-600 mr-2" />
+                <span
+                  id="dash-logo-text"
+                  className="font-bold text-xl tracking-tight text-gray-900"
+                >
+                  PrepAI
+                </span>
+              </div>
+              
+              {/* Close Button (Mobile Only) */}
+              <button
+                onClick={closeMobileMenu}
+                className="md:hidden p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <nav id="dash-nav-menu" className="p-4 space-y-2 mt-2">
+              <NavLink
+                id="nav-item-dashboard"
+                end
+                to="/home"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                    isActive
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`
+                }
+              >
+                <LayoutDashboard className="w-5 h-5" />
+                Dashboard
+              </NavLink>
+              <NavLink
+                id="nav-item-reports"
+                to="reports"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                    isActive
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`
+                }
+              >
+                <Files className="w-5 h-5" />
+                All Reports
+              </NavLink>
+              <NavLink
+                id="nav-item-profile"
+                to="profile"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                    isActive
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`
+                }
+              >
+                <User className="w-5 h-5" />
+                Profile
+              </NavLink>
+            </nav>
           </div>
 
-          <nav id="dash-nav-menu" className="p-4 space-y-2 mt-4">
-            <NavLink
-              id="nav-item-dashboard"
-              end
-              to="/home"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 ${isActive ? "bg-gray-700 text-White" : ""} text-white rounded-xl font-medium transition-colors`
-              }
+          <div id="dash-sidebar-bottom" className="p-4">
+            <button
+              id="logout-btn"
+              className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-xl font-medium transition-colors"
+              onClick={() => {
+                closeMobileMenu();
+                handleLogout();
+              }}
             >
-              Dashboard
-            </NavLink>
-            <NavLink
-              id="nav-item-reports"
-              to="reports"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 ${isActive ? " bg-gray-700" : ""} text-white rounded-xl font-medium transition-colors`
-              }
-            >
-              All reports
-            </NavLink>
-            <NavLink
-              id="nav-item-profile"
-              to="profile"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 ${isActive ? " bg-gray-700" : ""} text-white rounded-xl font-medium transition-colors`
-              }
-            >
-              Profile
-            </NavLink>
-          </nav>
-        </div>
-
-        <div id="dash-sidebar-bottom" className="p-4 border-t border-gray-700">
-          <button
-            id="logout-btn"
-            className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-100 hover:text-red-700 rounded-xl font-medium transition-colors"
-            onClick={handleLogout}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              ></path>
-            </svg>
-            logout
-          </button>
-        </div>
-      </aside>
-    </div>
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
+          </div>
+        </aside>
+      </div>
+    </>
   );
 };

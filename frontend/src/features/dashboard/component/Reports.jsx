@@ -13,7 +13,7 @@ export const Reports = () => {
       setReports(data);
     };
     getallReports();
-  }, []);
+  }, [handleGetAllReports]);
 
   console.log(reports);
   return (

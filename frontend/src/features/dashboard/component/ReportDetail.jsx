@@ -1,77 +1,19 @@
-// import React from 'react'
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useDash } from "../hooks/useDash";
 
-// import { useNavigate } from "react-router-dom";
-// import { Reports } from "./Reports";
-
-function ReportDetail() {
+export function ReportDetail() {
   const { id } = useParams();
-  const [reportData, setReportData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const [reportData, setReportData] = useState(location.state?.report || null);
+  const { loading, handleGetReportDetail,handleGenrateResume } = useDash();
   useEffect(() => {
-    const getReportDetail = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `http://localhost:3000/api/interview/report/${id}`,
-          {
-            withCredentials: true,
-          },
-        );
-
-        setReportData(res.data.interviewReport);
-        console.log(res.data.interviewReport);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getReportDetail();
-  }, [id]);
-  console.log(reportData.behavioralQuestions);
-
-  const handleGenrateResume = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        `http://localhost:3000/api/interview/resume/pdf/${reportData._id}`,
-        {},
-        {
-          withCredentials: true,
-
-          responseType: "blob",
-        },
-      );
-
-      const file = new Blob([res.data], {
-        type: "application/pdf",
-      });
-
-      const fileURL = window.URL.createObjectURL(file);
-
-      const link = document.createElement("a");
-
-      link.href = fileURL;
-
-      link.download = "resume.pdf";
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      link.remove();
-
-      window.URL.revokeObjectURL(fileURL);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    if (!reportData) {
+      handleGetReportDetail(id).then((data) => setReportData(data));
     }
-  };
+  }, [id, reportData, handleGetReportDetail]);
+
+ 
 
   if (loading) {
     return <h1>Loading.....</h1>;
@@ -99,11 +41,11 @@ function ReportDetail() {
                 id="report-title"
                 className="text-3xl font-bold text-white tracking-tight"
               >
-                {reportData.title}
+                {reportData?.title}
               </h1>
               <p id="report-date" className="text-sm text-slate-500 mt-1"></p>
               Generated on{" "}
-              {new Date(reportData.updatedAt).toLocaleString("en-IN", {
+              {new Date(reportData?.updatedAt).toLocaleString("en-IN", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -114,7 +56,7 @@ function ReportDetail() {
               <button
                 id="download-pdf-btn"
                 className="px-5 py-2.5 bg-transparent border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-all text-sm font-semibold flex items-center gap-2"
-                onClick={handleGenrateResume}
+                onClick={() => handleGenrateResume(reportData?._id)}
               >
                 <svg
                   className="w-4 h-4"
@@ -145,7 +87,7 @@ function ReportDetail() {
                   id="score-value"
                   className="text-2xl font-bold text-green-400"
                 >
-                  {reportData.matchScore}%
+                  {reportData?.matchScore}%
                 </span>
               </div>
             </div>
@@ -181,10 +123,10 @@ function ReportDetail() {
                 </h2>
 
                 <div id="tech-q-list" className="space-y-6">
-                  {reportData.technicalQuestions?.map((question, index) => (
+                  {reportData?.technicalQuestions?.map((question, index) => (
                     <div
                       id="tech-q-1"
-                      key={crypto.randomUUID()}
+                      key={index}
                       className="bg-[#131722] border border-slate-700 rounded-2xl p-5"
                     >
                       <p
@@ -241,10 +183,10 @@ function ReportDetail() {
                   </svg>
                   Behavioral Questions
                 </h2>
-                {reportData.behavioralQuestions?.map((question, index) => (
+                {reportData?.behavioralQuestions?.map((question, index) => (
                   <div
                     id="beh-q-list"
-                    key={crypto.randomUUID()}
+                    key={index}
                     className="space-y-6"
                   >
                     <div
@@ -309,9 +251,9 @@ function ReportDetail() {
                 </h2>
 
                 <div id="gaps-list" className="flex flex-col gap-3">
-                  {reportData.skillGaps?.map((gap, index) => (
+                  {reportData?.skillGaps?.map((gap, index) => (
                     <div
-                      key={crypto.randomUUID()}
+                      key={index}
                       id={`gap-${index + 1}`}
                       className="bg-[#131722] border border-orange-500/30 rounded-xl p-3 flex items-start gap-3"
                     >
@@ -363,10 +305,10 @@ function ReportDetail() {
                   id="timeline-container"
                   className="relative border-l-2 border-slate-700 ml-3 space-y-8"
                 >
-                  {reportData.preparationPlan?.map((day) => (
+                  {reportData?.preparationPlan?.map((day, index) => (
                     <div
                       id="day-1"
-                      key={crypto.randomUUID()}
+                      key={index}
                       className="relative pl-6"
                     >
                       <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[#131722] border-2 border-green-500"></div>
@@ -380,8 +322,8 @@ function ReportDetail() {
                         id="day-1-tasks"
                         className="list-disc list-outside ml-4 text-xs text-slate-400 space-y-1"
                       >
-                        {day.tasks?.map((task) => (
-                          <li key={crypto.randomUUID()}>{task}</li>
+                        {day?.tasks?.map((task,index) => (
+                          <li key={index}>{task}</li>
                         ))}
                       </ul>
                     </div>
@@ -395,5 +337,3 @@ function ReportDetail() {
     </div>
   );
 }
-
-export default ReportDetail;

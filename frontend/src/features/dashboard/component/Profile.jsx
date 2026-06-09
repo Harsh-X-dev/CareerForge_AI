@@ -1,22 +1,6 @@
-import { useContext } from "react";
-import { AuthContext } from "../../AuthContext";
-import axios from "axios";
-
+import useAuth from "../../auth/hooks/useAuth.js";
 export const Profile = () => {
-  const context = useContext(AuthContext);
-  const { user,setUser } = context;
-
-  const handleLogout =async () => {
-    try {
-    await axios.post("http://localhost:3000/api/auth/logout",{},{
-      withCredentials:true
-    })
-    setUser(null)
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
+  const { user, handleLogoutUser } = useAuth();
 
   return (
     <div
@@ -91,7 +75,7 @@ export const Profile = () => {
           <button
             id="card-logout-btn"
             type="button"
-            onClick={handleLogout}
+            onClick={handleLogoutUser}
             className="px-8 py-3 bg-transparent border-2 border-slate-600 text-slate-400 font-semibold rounded-2xl hover:bg-red-500/10 hover:border-red-500 hover:text-red-500 transition-all flex items-center gap-2 shadow-sm"
           >
             logout

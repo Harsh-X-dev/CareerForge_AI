@@ -1,27 +1,6 @@
-// import React from 'react'
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../AuthContext";
-import axios from "axios";
-export const Sidebar = () => {
-  const context = useContext(AuthContext);
-  const { setUser } = context;
 
-  const handleLogout = async () => {
-    try {
-      await axios.post(
-        "http://localhost:3000/api/auth/logout",
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-      setUser(null);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+export const Sidebar = ({ handleLogout }) => {
   return (
     <div className="bg-gray-900 h-screen flex font-['Inter',_sans-serif] overflow-hidden">
       <aside
@@ -59,7 +38,7 @@ export const Sidebar = () => {
             <NavLink
               id="nav-item-dashboard"
               end
-              to="/dashboard"
+              to="/home"
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 ${isActive ? "bg-gray-700 text-White" : ""} text-white rounded-xl font-medium transition-colors`
               }

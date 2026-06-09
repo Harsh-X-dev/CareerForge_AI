@@ -10,7 +10,7 @@ import {
   Target,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Loading } from "../../../component/loading";
+import { Loading } from "../../../component/Loading.jsx";
 
 export function ReportDetail() {
   const { id } = useParams();

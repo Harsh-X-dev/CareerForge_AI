@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate,Link} from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { Loading } from "../../../component/loading.jsx";
+import { Loading } from "../../../component/Loading.jsx";
 const Register = () => {
   const { handleRegisterUser, loading, user } = useAuth();
   const [data, setData] = useState({

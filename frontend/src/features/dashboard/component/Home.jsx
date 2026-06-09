@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useDash } from "../hooks/useDash";
 import { UploadCloud, Sparkles } from "lucide-react";
-import { Loading } from "../../../component/loading";
+import { Loading } from "../../../component/Loading.jsx";
 
 export const Home = () => {
   const [data, setData] = useState({});

@@ -23,24 +23,17 @@ export function ReportDetail() {
       handleGetReportDetail(id).then((data) => setReportData(data));
     }
   }, [id, reportData]);
-
 if (loading) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex h-screen flex-col items-center justify-center">
       <Loading />
 
-      <div className="max-w-md text-center">
-        <p className="text-lg font-medium text-gray-700">
-          Generating your report...
-        </p>
-        <p className="mt-1 text-sm text-gray-500">
-          This process may take a few minutes depending on the size of your resume and the analysis being performed.
-        </p>
-      </div>
+      <p className="mt-4 text-center text-sm text-gray-500">
+        This may take a few minutes. Please wait...
+      </p>
     </div>
   );
 }
-
   return (
     <div
       id="report-detail-body"

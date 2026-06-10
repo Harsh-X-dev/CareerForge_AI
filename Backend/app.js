@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 const app = express();
 app.use(cors( {
-  origin: process.env.ORIGIN || "http://localhost:5173",
+  origin: process.env.ORIGIN ,
   credentials: true
 }));
 app.use(express.json());
@@ -13,4 +13,10 @@ import interviewRouter from "./routes/interview.routes.js";
 
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Server is running",
+  });
+});
 export default app;

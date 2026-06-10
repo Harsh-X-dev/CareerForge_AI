@@ -23,13 +23,9 @@ export function ReportDetail() {
       handleGetReportDetail(id).then((data) => setReportData(data));
     }
   }, [id, reportData]);
-
-  if (loading) {
-    return (
-      <Loading/>
-    );
-  }
-
+if (loading) {
+  return <Loading message={true} />; 
+}
   return (
     <div
       id="report-detail-body"
